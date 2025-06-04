@@ -1,10 +1,12 @@
-# AWS Lambda Cheatsheet
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>AWS Lambda Cheatsheet</title>
+<body>
+<h1>AWS Lambda Cheatsheet</h1>
 
 <h3>This cheatsheet is probably based on Python</h3>
-
 <br>
-
-<table>
+<table border="1">
   <tr>
     <th colspan="4">Runtime Versions</th>
   </tr>
@@ -117,7 +119,7 @@
 
 <br>
 
-<table>
+<table border="1">
   <tr>
     <th colspan="4">Available Operating System</th>
   </tr>
@@ -140,7 +142,7 @@
 
 <br>
 
-<table>
+<table border="1">
   <tr>
     <th colspan="3">Settings | Limits</th>
   </tr>
@@ -163,7 +165,7 @@
   </tr>
   <tr>
     <td><b>Max Memory & Execution Time</b></td>
-    <td>10,240 MB (1 MB increments)<br>900 seconds (15 Minutes) Timeout</td>
+    <td>3008 MB Memory (64 MB increments)<br>15 Minutes Timeout</td>
     <td>--</td>
   </tr>
   <tr>
@@ -181,13 +183,6 @@
     <td>
       <br>50 MB (zipped, direct upload)
       <br>250 MB (unzipped, including layers)
-    </td>
-    <td>--</td>
-  </tr>
-  <tr>
-    <td><b><a href="https://youtu.be/23fE57EFRK4">Container image</a> code package size</b></td>
-    <td>
-      <br>10 GB
     </td>
     <td>--</td>
   </tr>
@@ -322,50 +317,7 @@
   </tr>
 </table>
 <br>
-<table>
-  <tr>
-    <th colspan=2>Execution Role (Common Execution Role Available)</th>
-  </tr>
-  <tr>
-    <td><b>AWSLambdaBasicExecutionRole</b></td>
-    <td>Grants permissions only for the Amazon CloudWatch Logs actions to write logs.</td>
-  </tr>
-  <tr>
-    <td><b>AWSLambdaKinesisExecutionRole</b></td>
-    <td>Grants permissions for Amazon Kinesis Streams actions, and CloudWatch Logs actions.</td>
-  </tr>
-  <tr>
-    <td><b>AWSLambdaDynamoDBExecutionRole</b></td>
-    <td>Grants permissions for DynamoDB streams actions and CloudWatch Logs actions.</td>
-  </tr>
-  <tr>
-    <td><b>AWSLambdaVPCAccessExecutionRole</b></td>
-    <td>Grants permissions for Amazon Elastic Compute Cloud (Amazon EC2) actions to manage elastic network interfaces (ENIs).</td>
-  </tr>
-  <tr>
-    <td><b>AWSXrayWriteOnlyAccess</b></td>
-    <td>Grants permission for X-ray to to upload trace data to debug and analyze.</td>
-  </tr>
-</table>
-<br>
-<b>Add new permission</b>
-
-    import boto3
-    client = boto3.client('lambda')
-    
-    # Role ARN can be found on the top right corner of the Lambda function
-    response = client.add_permission(
-        FunctionName='string',
-        StatementId='string',
-        Action='string',
-        Principal='string',
-        SourceArn='string',
-        SourceAccount='string',
-        EventSourceToken='string',
-        Qualifier='string'
-    )
-<br>
-<table>
+<table border="1">
   <tr>
     <th colspan="2">Execution | Invoke | Tweaks</th>
   </tr>
@@ -403,8 +355,98 @@
   </tr>
 </table>
 <br>
+<table border=1>
+  <tr>
+    <th colspan=2>Execution Role (Common Execution Role Available)</th>
+  </tr>
+  <tr>
+    <td><b>AWSLambdaBasicExecutionRole</b></td>
+    <td>Grants permissions only for the Amazon CloudWatch Logs actions to write logs.</td>
+  </tr>
+  <tr>
+    <td><b>AWSLambdaKinesisExecutionRole</b></td>
+    <td>Grants permissions for Amazon Kinesis Streams actions, and CloudWatch Logs actions.</td>
+  </tr>
+  <tr>
+    <td><b>AWSLambdaDynamoDBExecutionRole</b></td>
+    <td>Grants permissions for DynamoDB streams actions and CloudWatch Logs actions.</td>
+  </tr>
+  <tr>
+    <td><b>AWSLambdaVPCAccessExecutionRole</b></td>
+    <td>Grants permissions for Amazon Elastic Compute Cloud (Amazon EC2) actions to manage elastic network interfaces (ENIs).</td>
+  </tr>
+</table>
+<br>
+<b>Add new permission</b>
 
-<table>
+    import boto3
+    client = boto3.client('lambda')
+    
+    # Role ARN can be found on the top right corner of the Lambda function
+    response = client.add_permission(
+        FunctionName='string',
+        StatementId='string',
+        Action='string',
+        Principal='string',
+        SourceArn='string',
+        SourceAccount='string',
+        EventSourceToken='string',
+        Qualifier='string'
+    )
+<br>
+<table border=1>
+  <tr>
+    <th colspan="2">Execution | Invoke | Tweaks</th>
+  </tr>
+  <tr>
+    <td>A Lambda can invoke another Lambda</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>A Lambda in one region can invoke another lambda in other region</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>A Lambda can invoke same Lambda</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Exceed 5 minutes execution time</td>
+    <td>Yes (Can Tweak around)</td>
+  </tr>
+  <tr>
+    <td>How to exceed 5 minutes execution time</td>
+    <td> <a href="http://www.thetechnologyupdates.com/aws-lambda-going-beyond-5-minutes-execution/">Self-Invoke</a> , SNS, SQS</td>
+  </tr>
+  <tr>
+    <td>Asynchronous Execution</td>
+    <td>Yes <a href="http://www.thetechnologyupdates.com/aws-lambda-execute-lambda-asynchronously-parallel/">(Async Exec)</a></td>
+  </tr>
+  <tr>
+    <td>Invoke same Lamba with different version</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Invoke Request Max Payload Size (RequestResponse/synrchronous invocation)</td>
+    <td>6 MB</td>
+  </tr>
+  <tr>
+    <td>Invoke Request Max Payload Size (Event/asynchronous invocation)</td>
+    <td>128 KB</td>
+  </tr>
+</table>
+<br>
+<div>
+<b>Setting Lambda Invoke Max Retry attempt to 0</b><br>
+<code>
+    import boto3, botocore<br>
+    config = botocore.config.Config(connect_timeout=300, read_timeout=300)<br>
+    invokeLam = boto3.client('lambda', region_name='us-east-1', config=config)<br>
+    invokeLam.meta.events._unique_id_handlers['retry-config-lambda']['handler']._checker.__dict__['_max_attempts'] = 0<br>
+</code>
+</div>
+<br>
+<table border=1>
   <tr>
     <th>Triggers</th>
     <th>Description</th>
@@ -429,11 +471,6 @@
     <td><b>Alexa Smart Home</b></td>
     <td>Trigger AWS Lambda with desired skill</td>
     <td>Application ID (Skill)</td>
-  </tr>
-  <tr>
-    <td><b>Application Load Balancer</b></td>
-    <td>Trigger AWS Lambda from ALB</td>
-    <td>Application Load Balancer<br>Listener (It is the port that ALP receivce traffice)<br>Host<br>Path</td>
   </tr>
   <tr>
     <td><b>CloudFront</b></td>
@@ -480,14 +517,9 @@
     <td>Trigger AWS Lambda whenever the message is published to Amazon SNS Topic</td>
     <td>SNS Topic</td>
   </tr>
-  <tr>
-    <td><b>SQS</b></td>
-    <td>Trigger AWS Lambda on message arrival in SQS</td>
-    <td>SQS queue<br>Batch size<br><b>Limitation:</b> It only works with Standard queue and not FIFO queue</td>
-  </tr>
 </table>
 <br>
-<table>
+<table border=1>
   <tr>
     <th colspan="3">Troubleshooting</th>
   </tr>
@@ -534,6 +566,11 @@
     <td>Update the handler configuration as per your filename.function_name</td>
   </tr>
   <tr>
+    <td>Task timed out after 3.00/300 seconds</td>
+    <td>Lamda execution is exceeding the desired time limit</td>
+    <td>If task timeout is less than 300 seconds than it is required to increase the Timeout in configuration.<br>If it is 300 seconds than one can tweak around to <a href="http://www.thetechnologyupdates.com/aws-lambda-going-beyond-5-minutes-execution/">go beyound 5 minutes</a>.</td>
+  </tr>
+  <tr>
     <td>OperationalError: (psycopg2.OperationalError) terminating connection due to administrator command
 SSL connection has been closed unexpectedly</td>
     <td>RDS/Database System has been rebooted.<br>In a typical web application using an ORM (SQLAlchemy) Session, the above condition would correspond to a single request failing with a 500 error, then the web application continuing normally beyond that. Hence the approach is “optimistic” in that frequent database restarts are not anticipated.</td>
@@ -550,410 +587,458 @@ SSL connection has been closed unexpectedly</td>
 <br>
 <b>Add Permission</b>
 <p>It add mention permission to the Lambda function</p>
-<p>Syntax</p>
-
-      add-permission
-    --function-name <value>
-    --statement-id <value>
-    --action <value>
-    --principal <value>
-    [--source-arn <value>]
-    [--source-account <value>]
-    [--event-source-token <value>]
-    [--qualifier <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      add-permission<br>
+    --function-name <value><br>
+    --statement-id <value><br>
+    --action <value><br>
+    --principal <value><br>
+    [--source-arn <value>]<br>
+    [--source-account <value>]<br>
+    [--event-source-token <value>]<br>
+    [--qualifier <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     add-permission --function-name functionName --statement-id role-statement-id --action lambda:CreateFunction --principal s3.amazonaws.com
-<br>
+</code>
+<br><br>
 <b>Create Alias</b>
 <p>It creates alias for the given Lambda function name</p>
-<p>Syntax</p>
-
-      create-alias
-    --function-name <value>
-    --name <value>
-    --function-version <value>
-    [--description <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      create-alias<br>
+    --function-name <value><br>
+    --name <value><br>
+    --function-version <value><br>
+    [--description <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     create-alias --function-name functionName --name fliasName --function-version version
-<br>
+</code>
+<br><br>
 <b>Create Event Source Mapping</b>
 <p>It identify event-source from Amazon Kinesis stream or an Amazon DynamoDB stream</p>
+<code>
+      create-event-source-mapping<br>
+    --event-source-arn <value><br>
+    --function-name <value><br>
+    [--enabled | --no-enabled]<br>
+    [--batch-size <value>]<br>
+    --starting-position <value><br>
+    [--starting-position-timestamp <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</value>code>
 
-      create-event-source-mapping
-    --event-source-arn <value>
-    --function-name <value>
-    [--enabled | --no-enabled]
-    [--batch-size <value>]
-    --starting-position <value>
-    [--starting-position-timestamp <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-
-<p>Example</p>
-
+<b><p>Example</p></b>
+<code>
     create-event-source-mapping --event-source-arn arn:aws:kinesis:us-west-1:1111 --function-name functionName --starting-position LATEST
-
-<br>
+</code>
+<br><br>
 <b>Create Function</b>
 <p>It creates the new function</p>
-<p>Syntax</p>
-
-      create-function
-    --function-name <value>
-    --runtime <value>
-    --role <value>
-    --handler <value>
-    [--code <value>]
-    [--description <value>]
-    [--timeout <value>]
-    [--memory-size <value>]
-    [--publish | --no-publish]
-    [--vpc-config <value>]
-    [--dead-letter-config <value>]
-    [--environment <value>]
-    [--kms-key-arn <value>]
-    [--tracing-config <value>]
-    [--tags <value>]
-    [--zip-file <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      create-function<br>
+    --function-name <value><br>
+    --runtime <value><br>
+    --role <value><br>
+    --handler <value><br>
+    [--code <value>]<br>
+    [--description <value>]<br>
+    [--timeout <value>]<br>
+    [--memory-size <value>]<br>
+    [--publish | --no-publish]<br>
+    [--vpc-config <value>]<br>
+    [--dead-letter-config <value>]<br>
+    [--environment <value>]<br>
+    [--kms-key-arn <value>]<br>
+    [--tracing-config <value>]<br>
+    [--tags <value>]<br>
+    [--zip-file <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     create-function --function-name functionName --runtime python3.6 --role arn:aws:iam::account-id:role/lambda_basic_execution
      --handler main.handler
-<br>
+</code>
+<br><br>
 <b>Delete Alias</b>
 <p>It deletes the alias</p>
-<p>Syntax</p>
-
-      delete-alias
-    --function-name <value>
-    --name <value>
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      delete-alias<br>
+    --function-name <value><br>
+    --name <value><br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     delete-alias --function-name functionName --name aliasName
-<br>
+</code>
+<br><br>
 <b>Delete Event Source Mapping</b>
 <p>It deletes the event source mapping</p>
-<p>Syntax</p>
-
-      delete-event-source-mapping
-    --uuid <value>
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-    
+<b><p>Syntax</p></b>
+<code>
+      delete-event-source-mapping<br>
+    --uuid <value><br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     delete-event-source-mapping --uuid 12345kxodurf3443
-<br>
+</code>
+<br><br>
 <b>Delete Function</b>
 <p>It will delete the function and all the associated settings</p>
-<p>Syntax</p>
-
-      delete-function
-    --function-name <value>
-    [--qualifier <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      delete-function<br>
+    --function-name <value><br>
+    [--qualifier <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     delete-function --function-name FunctionName
-<br>
+</code>
+<br><br>
 <b>Get Account Settings</b>
 <p>It will fetch the user’s account settings</p>
-<p>Syntax</p>
-
-      get-account-settings
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-
-<br>
+<b><p>Syntax</p></b>
+<code>
+      get-account-settings<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<br><br>
 <b>Get Alias</b>
 <p>It returns the desired alias information like description, ARN</p>
-<p>Syntax</p>
-
-      get-alias
-    --function-name <value>
-    --name <value>
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      get-alias<br>
+    --function-name <value><br>
+    --name <value><br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     get-alias --function-name functionName --name aliasName
-<br>
+</code>
+<br><br>
 <b>Get Event Source Mapping</b>
 <p>It returns the config information for the desired event source mapping</p>
-<p>Syntax</p>
-
-      get-event-source-mapping
-    --uuid <value>
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
+<b><p>Syntax</p></b>
+<code>
+      get-event-source-mapping<br>
+    --uuid <value><br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
     
     get-event-source-mapping --uuid 12345kxodurf3443
-<br>
+<br><br>
 <b>Get Function</b>
 <p>It returns the Lambda Function information</p>
-<p>Syntax</p>
-
-      get-function
-    --function-name <value>
-    [--qualifier <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-    
+<b><p>Syntax</p></b>
+<code>
+      get-function<br>
+    --function-name <value><br>
+    [--qualifier <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     get-function --function-name functionName
-<br>
+</code>
+<br><br>
 <b>Get Function Configuration</b>
 <p>It returns the Lambda function configuration</p>
-<p>Syntax</p>
-
-      get-function-configuration
-    --function-name <value>
-    [--qualifier <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      get-function-configuration<br>
+    --function-name <value><br>
+    [--qualifier <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
       get-function-configuration --function-name functionName
-<br>
+</code>
+<br><br>
 <b>Get Policy</b>
 <p>It return the linked policy with Lambda function</p>
-<p>Syntax</p>
-
-      get-policy
-    --function-name <value>
-    [--qualifier <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      get-policy<br>
+    --function-name <value><br>
+    [--qualifier <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     get-policy --function-name functionName
-<br>
+</code>
+<br><br>
 <b>Invoke</b>
 <p>It invoke the mention Lambda function name</p>
-<p><Syntax/p>
-
-      invoke
-    --function-name <value>
-    [--invocation-type <value>]
-    [--log-type <value>]
-    [--client-context <value>]
-    [--payload <value>]
-    [--qualifier <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      invoke<br>
+    --function-name <value><br>
+    [--invocation-type <value>]<br>
+    [--log-type <value>]<br>
+    [--client-context <value>]<br>
+    [--payload <value>]<br>
+    [--qualifier <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     invoke --function-name functionName
-<br>
+</code>
+<br><br>
 <b>List Aliases</b>
 <p>It return all the aliases that is created for Lambda function</p>
-<p>Syntax</p>
-
-      list-aliases
-    --function-name <value>
-    [--function-version <value>]
-    [--marker <value>]
-    [--max-items <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      list-aliases<br>
+    --function-name <value><br>
+    [--function-version <value>]<br>
+    [--marker <value>]<br>
+    [--max-items <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
       list-aliases --function-name functionName
-<br>
+</code>
+<br><br>
 <b>List Event Source Mappings</b>
 <p>It return all the list event source mappings that is created with create-event-source-mapping</p>
-<p>Syntax</p>
-
-      list-event-source-mappings
-    [--event-source-arn <value>]
-    [--function-name <value>]
-    [--max-items <value>]
-    [--cli-input-json <value>]
-    [--starting-token <value>]
-    [--page-size <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      list-event-source-mappings<br>
+    [--event-source-arn <value>]<br>
+    [--function-name <value>]<br>
+    [--max-items <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--starting-token <value>]<br>
+    [--page-size <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
       list-event-source-mappings --event-source-arn arn:aws:arn --function-name functionName
-<br>
+</code>
+<br><br>
 <b>List Functions</b>
 <p>It return all the Lambda function</p>
-<p>Syntax</p>
-
-      list-functions
-    [--master-region <value>]
-    [--function-version <value>]
-    [--max-items <value>]
-    [--cli-input-json <value>]
-    [--starting-token <value>]
-    [--page-size <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      list-functions<br>
+    [--master-region <value>]<br>
+    [--function-version <value>]<br>
+    [--max-items <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--starting-token <value>]<br>
+    [--page-size <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
       list-functions --master-region us-west-1 --function-version ALL
-<br>
+</code>
+<br><br>
 <b>List Tags</b>
 <p>It return the list of tags that are assigned to the Lambda function</p>
-<p>Syntax</p>
-
-      list-tags
-    --resource <value>
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      list-tags<br>
+    --resource <value><br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
       list-tags --resource arn:aws:function
-<br>
+</code>
+<br><br>
 <b>List Versions by functions</b>
 <p>It return all the versions of the desired Lambda function</p>
-<p>Syntax</p>
-
-      list-versions-by-function
-    --function-name <value>
-    [--marker <value>]
-    [--max-items <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      list-versions-by-function<br>
+    --function-name <value><br>
+    [--marker <value>]<br>
+    [--max-items <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     list-versions-by-function --function-name functionName
-<br>
+</code>
+<br><br>
 <b>Publish Version</b>
 <p>It publish the version of the Lambda function from $LATEST snapshot</p>
-<p>Syntax</p>
-
-      publish-version
-    --function-name <value>
-    [--code-sha-256 <value>]
-    [--description <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      publish-version<br>
+    --function-name <value><br>
+    [--code-sha-256 <value>]<br>
+    [--description <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
       publish-version --function-name functionName
-<br>
+</code>
+<br><br>
 <b>Remove Permission</b>
 <p>It remove the single permission from the policy that is linked with the Lambda function</p>
-<p>Syntax</p>
-
-     remove-permission
-    --function-name <value>
-    --statement-id <value>
-    [--qualifier <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+     remove-permission<br>
+    --function-name <value><br>
+    --statement-id <value><br>
+    [--qualifier <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
      remove-permission --function-name functionName --statement-id role-statement-id
-<br>
+</code>
+<br><br>
 <b>Tag Resource</b>
 <p>It creates the tags for the lambda function in the form of key-value pair</p>
-<p>Syntax</p>
-
-      tag-resource
-    --resource <value>
-    --tags <value>
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      tag-resource<br>
+    --resource <value><br>
+    --tags <value><br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     tag-resource --resource arn:aws:arn --tags {‘key’: ‘pair’}
-<br>
+</code>
+<br><br>
 <b>Untag Resource</b>
 <p>It remove tags from the Lambda function</p>
-<p>Syntax</p>
-
-     untag-resource
-    --resource <value>
-    --tag-keys <value>
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+     untag-resource<br>
+    --resource <value><br>
+    --tag-keys <value><br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     untag-resource --resource arn:aws:complete --tag-keys [‘key1’, ‘key2’]
-<br>
+</code>
+<br><br>
 <b>Update Alias</b>
 <p>It update the alias name of the desired lambda function</p>
-<p>Syntax</p>
-
-      update-alias
-    --function-name <value>
-    --name <value>
-    [--function-version <value>]
-    [--description <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      update-alias<br>
+    --function-name <value><br>
+    --name <value><br>
+    [--function-version <value>]<br>
+    [--description <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     update-alias --function-name functionName --name aliasName
-<br>
+</code>
+<br><br>
 <b>Update Event Source Mapping</b>
 <p>It updates the event source mapping incase you want to change the existing parameters</p>
-<p>Syntax</p>
-
-      update-event-source-mapping
-    --uuid <value>
-    [--function-name <value>]
-    [--enabled | --no-enabled]
-    [--batch-size <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      update-event-source-mapping<br>
+    --uuid <value><br>
+    [--function-name <value>]<br>
+    [--enabled | --no-enabled]<br>
+    [--batch-size <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     update-event-source-mapping --uuid 12345kxodurf3443
-<br>
+</code>
+<br><br>
 <b>Update Function Code</b>
 <p>It updates the code of the desired Lambda function</p>
-<p>Syntax</p>
-
-      update-function-code
-    --function-name <value>
-    [--zip-file <value>]
-    [--s3-bucket <value>]
-    [--s3-key <value>]
-    [--s3-object-version <value>]
-    [--publish | --no-publish]
-    [--dry-run | --no-dry-run]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      update-function-code<br>
+    --function-name <value><br>
+    [--zip-file <value>]<br>
+    [--s3-bucket <value>]<br>
+    [--s3-key <value>]<br>
+    [--s3-object-version <value>]<br>
+    [--publish | --no-publish]<br>
+    [--dry-run | --no-dry-run]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     update-function-code --function-name functionName
-<br>
+</code>
+<br><br>
 <b>Update Function Configuration</b>
 <p>It updates the configuration of the desired Lambda function</p>
-<p>Syntax</p>
-
-      update-function-configuration
-    --function-name <value>
-    [--role <value>]
-    [--handler <value>]
-    [--description <value>]
-    [--timeout <value>]
-    [--memory-size <value>]
-    [--vpc-config <value>]
-    [--environment <value>]
-    [--runtime <value>]
-    [--dead-letter-config <value>]
-    [--kms-key-arn <value>]
-    [--tracing-config <value>]
-    [--cli-input-json <value>]
-    [--generate-cli-skeleton <value>]
-<p>Example</p>
-
+<b><p>Syntax</p></b>
+<code>
+      update-function-configuration<br>
+    --function-name <value><br>
+    [--role <value>]<br>
+    [--handler <value>]<br>
+    [--description <value>]<br>
+    [--timeout <value>]<br>
+    [--memory-size <value>]<br>
+    [--vpc-config <value>]<br>
+    [--environment <value>]<br>
+    [--runtime <value>]<br>
+    [--dead-letter-config <value>]<br>
+    [--kms-key-arn <value>]<br>
+    [--tracing-config <value>]<br>
+    [--cli-input-json <value>]<br>
+    [--generate-cli-skeleton <value>]<br>
+</code>
+<b><p>Example</p></b>
+<code>
     update-function-configuration --function-name functionName
-<br>
+</code>
+<br><br>
 <h4>References</h4>
 <ul>
   <li><a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda Docs</a></li>
@@ -964,4 +1049,5 @@ SSL connection has been closed unexpectedly</td>
 <br>
 <b>For queries or issues, feel free to contact or open an <a href="https://github.com/srcecde/aws-lambda-cheatsheet/issues">issue</a></b>
 
-
+</body>
+</html>
